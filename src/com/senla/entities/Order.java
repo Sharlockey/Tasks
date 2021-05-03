@@ -5,21 +5,21 @@ import com.senla.statuses.OrderStatus;
 import java.util.Date;
 
 public class Order {
-    private final  String        ID;
+    private final  int           ID;
     private final  Book          booksInOrder;
     private        OrderStatus   status;
     private final  float         summaryPrice;
     private final  Date          executionDate;
 
-    public Order(String ID, Book booksInOrder, OrderStatus status) {
+    public Order(int ID, Book bookInOrder, OrderStatus status) {
         this.ID             = ID;
-        this.booksInOrder   = booksInOrder;
+        this.booksInOrder   = bookInOrder;
         this.status         = status;
-        this.summaryPrice   = booksInOrder.getPrice();
+        this.summaryPrice   = bookInOrder.getPrice();
         this.executionDate  = new Date();
     }
 
-    public String getID() {
+    public int getID() {
         return ID;
     }
 
@@ -44,6 +44,6 @@ public class Order {
     }
 
     public String toString() {
-        return getID() + "," + getSummaryPrice() + "," + getStatus() + "," + getExecutionDate() + ":" + booksInOrder.toString();
+        return getID() + ',' + booksInOrder.getName() + ',' + getSummaryPrice() + ',' + getExecutionDate() + ',' + getStatus();
     }
 }

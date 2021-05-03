@@ -1,24 +1,25 @@
 package com.senla.console.items;
 
-import com.senla.console.actions.CreateAction;
-import com.senla.console.actions.DeleteAction;
-import com.senla.console.actions.ExitAction;
-
-import java.util.Scanner;
+import com.senla.console.actions.*;
+import com.senla.init.IAdministrator;
 
 public class Builder {
 
     private Menu rootMenu;
 
-    public void buildMenu() {
+    public void buildMenu(IAdministrator administrator) {
         Menu rootMenu = new Menu();
         rootMenu.setName("Root Menu Options:");
 
-        MenuItem createObject = new MenuItem("Create object", new CreateAction(), rootMenu);
-        MenuItem deleteObject = new MenuItem("Delete object", new DeleteAction(), rootMenu);
-        MenuItem exit         = new MenuItem("Exit"         , new ExitAction()  , rootMenu);
+        MenuItem createObject       = new MenuItem("Create object"          , new CreateAction() , rootMenu, administrator);
+        MenuItem deleteObject       = new MenuItem("Delete object"          , new DeleteAction() , rootMenu, administrator);
+        MenuItem doBookActions      = new MenuItem("Do other book actions"  , new BookAction()   , rootMenu, administrator);
+        MenuItem doOrderActions     = new MenuItem("Do other order actions" , new OrderAction()  , rootMenu, administrator);
+        MenuItem showObject         = new MenuItem("Show object"            , new ShowAction  () , rootMenu, administrator);
+        MenuItem exit               = new MenuItem("Exit"                   , new ExitAction()   , rootMenu, administrator);
 
-        rootMenu.setMenuItems(new MenuItem[] { createObject, deleteObject, exit });
+
+        rootMenu.setMenuItems(new MenuItem[] { createObject, deleteObject, doBookActions, doOrderActions, showObject, exit });
         setRootMenu(rootMenu);
     }
 

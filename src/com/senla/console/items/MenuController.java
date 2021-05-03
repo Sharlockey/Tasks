@@ -18,7 +18,7 @@ public class MenuController {
 
     public void run() {
 
-        builder.buildMenu(); // builds main menu and sub-menus, creates actions
+        builder.buildMenu(administrator); // builds main menu and sub-menus, creates actions
         navigator.setCurrentMenu(builder.getRootMenu());
         navigator.printMenu();
         try {

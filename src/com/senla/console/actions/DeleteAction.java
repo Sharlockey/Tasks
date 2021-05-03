@@ -1,17 +1,30 @@
 package com.senla.console.actions;
 
+import com.senla.init.IAdministrator;
+
 import java.util.Scanner;
 
 public class DeleteAction implements IAction {
     @Override
-    public void execute() {
-        System.out.println("Enter object name to delete: ");
-        String objectName = new Scanner(System.in).nextLine();
+    public void execute(IAdministrator administrator) {
+        var scanner = new Scanner(System.in);
 
-        // your business logic layer starts here: facade.createObject(objectName)
-        // facade can be created in App.class and passed here via constructor
+        System.out.println("""
+                Choose an object you want to delete:
+                1. Delete a book.
+                2. Delete an order.
+                \s""");
 
-        System.out.printf("Executed delete action for object %s" + System.lineSeparator(), objectName);
-
+        switch (scanner.nextInt()) {
+            case 1 -> {
+                System.out.println("Enter a name of book:");
+                    administrator.deleteBook(scanner.next());
+            }
+            case 2 -> {
+                System.out.println("Enter an ID of order:");
+                    administrator.removeOrder(scanner.nextInt());
+            }
+            default -> System.out.println("Invalid argument. Nothing was deleted");
+        }
     }
 }

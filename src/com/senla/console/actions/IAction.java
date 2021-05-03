@@ -1,5 +1,7 @@
 package com.senla.console.actions;
 
+import com.senla.init.IAdministrator;
+
 public interface IAction {
-    void execute();
+    void execute(IAdministrator administrator);
 }

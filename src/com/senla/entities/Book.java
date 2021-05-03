@@ -2,20 +2,21 @@ package com.senla.entities;
 
 import com.senla.statuses.BookStatus;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class Book {
-    private final String           ID;
+    private final int              ID;
     private final String           name;
     private final Date             dateOfIssue;
     private final float            price;
     private       BookStatus       status;
     private final Date             receiptDate;
 
-    public Book(String ID, String name, long dateOfIssue, float price, BookStatus status) {
+    public Book(int ID, String name, Calendar calendar, float price, BookStatus status) {
         this.ID           = ID;
         this.name         = name;
-        this.dateOfIssue  = new Date(dateOfIssue);
+        this.dateOfIssue  = new Date(calendar.getTimeInMillis());
         this.price        = price;
         this.status       = status;
         this.receiptDate  = new Date();
@@ -45,7 +46,7 @@ public class Book {
         this.status = status;
     }
 
-    public String getID() {
+    public int getID() {
         return ID;
     }
 

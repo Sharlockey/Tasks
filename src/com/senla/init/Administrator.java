@@ -2,96 +2,96 @@ package com.senla.init;
 
 import com.senla.dao.BookDAO;
 import com.senla.dao.OrderDAO;
-import com.senla.dao.StoreDAO;
-import com.senla.dataprocessor.DataProcessor;
+import com.senla.dataprocessor.Generator;
 import com.senla.entities.Book;
-import com.senla.entities.Cash;
 import com.senla.entities.Order;
-import com.senla.entities.Store;
 import com.senla.services.BookServices;
 import com.senla.services.OrderServices;
-import com.senla.services.StoreServices;
-import com.senla.services.TransactionServices;
+import com.senla.statuses.BookStatus;
+import com.senla.statuses.OrderStatus;
 
 import java.util.*;
 
 public class Administrator implements IAdministrator {
-    private final Store                store;
+    private final ArrayList<Book>      booksInStore;
+    private final ArrayList<Order>     orderList;
     private final OrderServices        orderServices;
     private final BookServices         bookServices;
-    private final TransactionServices  transactionServices;
-    private final StoreServices        storeServices;
     private final BookDAO              bookDAO;
     private final OrderDAO             orderDAO;
-    private final StoreDAO             storeDAO;
-    private final DataProcessor        dataProcessor;
 
 
     public Administrator() {
         bookServices         = new BookServices();
         orderServices        = new OrderServices();
-        storeServices        = new StoreServices();
-        store                = new Store();
-        transactionServices  = new TransactionServices();
         bookDAO              = new BookDAO();
         orderDAO             = new OrderDAO();
-        storeDAO             = new StoreDAO();
-        dataProcessor        = new DataProcessor();
+        booksInStore         = new ArrayList<>();
+        orderList            = new ArrayList<>();
         importData();
     }
 
-
-
-    private void importData() {
-
-    }
+    // Data Access Object Action
 
     @Override
     public void saveChanges() {
 
     }
+    private void importData() {
+
+    }
+
+    // Book Action
+
     @Override
-    public boolean bookIsPresent(Book book, ArrayList<Book> books) {
-        return bookServices.bookIsPresent(book, books);
+    public void createBook(String name, Calendar calendar, float price) {
+        bookServices.addBook(booksInStore, bookServices.createBook(Generator.getRandomID(),
+                                                                   name,
+                                                                   calendar,
+                                                                   price,
+                                                                   BookStatus.PRESENT));
     }
     @Override
-    public void removeBookFromStore(Book book, Store store) {
-        bookServices.removeBookFromStore(book, store);
+    public void deleteBook(String name) {
+        bookServices.deleteBook(bookServices.findBook(name, booksInStore), booksInStore);
     }
     @Override
-    public void addBookToStore(Book book, Store store) {
-        bookServices.addBookToStore(book, store);
+    public void addBookToStore(String name) {
+        bookServices.addBookToStore(bookServices.findBook(name, booksInStore), orderServices.findOrderOfBook(name, orderList));
     }
     @Override
-    public Order createOrder(String ID, Book booksInOrder) {
-        return orderServices.createOrder(ID, booksInOrder);
+    public void removeBookFromStore(String name) {
+        bookServices.removeBookFromStore(bookServices.findBook(name, booksInStore), orderServices.findOrderOfBook(name, orderList));
     }
     @Override
-    public Order findOrder(ArrayList<Order> orders, Order order) {
-        return orderServices.findOrder(orders, order);
+    public void showBooksInStore(BookStatus status) {bookServices.showBooks(booksInStore, status);}
+
+    // Order action
+
+    @Override
+    public void createOrder(String name) {
+        orderServices.addOrder(orderList, orderServices.createOrder(Generator.getRandomID(),
+                                                                    bookServices.findBook(name, booksInStore)));
     }
     @Override
-    public void removeOrder(ArrayList<Order> orders, Order order) {
-        orderServices.removeOrder(orders, order);
+    public void removeOrder(int ID) {
+        orderServices.removeOrder(orderList, orderServices.findOrder(orderList, ID));
     }
     @Override
-    public void addOrder(ArrayList<Order> orders, Order order) {
-        orderServices.addOrder(orders, order);
+    public void completeOrder(int ID) {
+        orderServices.completeOrder(orderServices.findOrder(orderList, ID));
     }
     @Override
-    public void cancelOrder(Order order) {
-        orderServices.cancelOrder(order);
+    public void cancelOrder(int ID) {
+        orderServices.cancelOrder(orderServices.findOrder(orderList, ID));
     }
     @Override
-    public void completeOrder(Order order) {
-        orderServices.completeOrder(order);
+    public void requestOrder(int ID, String name) {
+        orderServices.addOrder(orderList, orderServices.createRequest(ID, bookServices.findBook(name, booksInStore)));
     }
     @Override
-    public ArrayList<Cash> getStoreCash(Store store) {
-        return transactionServices.getStoreCash(store);
+    public void showOrderInStore(OrderStatus status) {
+        orderServices.showOrder(orderList, status);
     }
-    @Override
-    public void addCashToStore(Store store, Cash cash) {
-        transactionServices.addCashToStore(store, cash);
-    }
+
 }

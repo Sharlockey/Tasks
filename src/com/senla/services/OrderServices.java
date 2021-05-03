@@ -8,18 +8,10 @@ import com.senla.statuses.OrderStatus;
 import java.util.ArrayList;
 
 public class OrderServices {
-    public OrderServices() {
 
-    }
-
-    public Order createOrder(String ID, Book booksInOrder) {
-        if (booksInOrder.getStatus() == BookStatus.PRESENT) return new Order(ID, booksInOrder, OrderStatus.NEW);
-        else return new Order(ID, booksInOrder, OrderStatus.REQUEST);
-    }
-
-    public Order findOrder(ArrayList<Order> orders, Order order) {
+    public Order findOrder(ArrayList<Order> orders, int ID) {
         for (var search: orders) {
-            if (order.getID().equals(search.getID())) {
+            if (ID == search.getID()) {
                 return search;
             }
         }
@@ -27,16 +19,7 @@ public class OrderServices {
     }
 
     public void removeOrder(ArrayList<Order> orders, Order order) {
-        var search = findOrder(orders, order);
-        if (search != null) {
-            orders.remove(search);
-        }
-    }
-
-    public void addOrder(ArrayList<Order> orders, Order order) {
-        if (order != null) {
-            orders.add(order);
-        }
+        orders.remove(order);
     }
 
     public void cancelOrder(Order order) {
@@ -47,7 +30,44 @@ public class OrderServices {
         order.setStatus(OrderStatus.COMPLETED);
     }
 
+    public Order createOrder(int ID, Book book){
+        if (book.getStatus() == BookStatus.PRESENT)
+            return new Order(ID, book, OrderStatus.NEW);
+        else
+            return new Order(ID, book, OrderStatus.REQUEST);
+    }
 
+    public Order createRequest(int ID, Book book) {
+        return new Order(ID, book, OrderStatus.REQUEST);
+    }
 
+    public void showOrder(ArrayList<Order> orders, OrderStatus status) {
+        if (status == OrderStatus.ALL)
+            for (var order: orders)
+                printOrder(order);
+        else
+            for (var order: orders)
+                if(order.getStatus() == status)
+                    printOrder(order);
+    }
+
+    private void printOrder(Order order) {
+        System.out.println("ID             : " + order.getID());
+        System.out.println("Book           : " + order.getBooksInOrder().getName());
+        System.out.println("Summary price  : " + order.getSummaryPrice());
+        System.out.println("Execution date : " + order.getExecutionDate());
+        System.out.println("Status         : " + order.getStatus());
+    }
+
+    public void addOrder(ArrayList<Order> orders,Order order) {
+        orders.add(order);
+    }
+
+    public Order findOrderOfBook(String name, ArrayList<Order> orders) {
+        for (var order: orders)
+            if (order.getBooksInOrder().getName().equals(name))
+               return order;
+        return null;
+    }
 
 }

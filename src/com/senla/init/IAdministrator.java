@@ -1,23 +1,21 @@
 package com.senla.init;
 
-import com.senla.entities.Book;
-import com.senla.entities.Cash;
-import com.senla.entities.Order;
-import com.senla.entities.Store;
+import com.senla.statuses.BookStatus;
+import com.senla.statuses.OrderStatus;
 
-import java.util.ArrayList;
+import java.util.Calendar;
 
 public interface IAdministrator {
     void              saveChanges             ();
-    boolean           bookIsPresent           (Book book, ArrayList<Book> books);
-    void              removeBookFromStore     (Book book, Store store);
-    void              addBookToStore          (Book book, Store store);
-    Order             createOrder             (String ID, Book booksInOrder);
-    Order             findOrder               (ArrayList<Order> orders, Order order);
-    void              removeOrder             (ArrayList<Order> orders, Order order);
-    void              addOrder                (ArrayList<Order> orders, Order order);
-    void              cancelOrder             (Order order);
-    void              completeOrder           (Order order);
-    ArrayList<Cash>   getStoreCash            (Store store);
-    void              addCashToStore          (Store store, Cash cash);
+    void              createBook              (String name, Calendar calendar, float price);
+    void              deleteBook              (String name);
+    void              createOrder             (String name);
+    void              removeBookFromStore     (String name);
+    void              addBookToStore          (String name);
+    void              removeOrder             (int ID);
+    void              cancelOrder             (int ID);
+    void              completeOrder           (int ID);
+    void              showBooksInStore        (BookStatus status);
+    void              showOrderInStore        (OrderStatus status);
+    void              requestOrder            (int ID, String name);
 }
